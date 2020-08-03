@@ -1,4 +1,5 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+﻿// NOTE(kbenjaminsson): Original shader comes from Keijiro Takahashi
+// See https://github.com/keijiro/ShadowDrawer
 
 Shader "Custom/ShadowDrawer"
 {
