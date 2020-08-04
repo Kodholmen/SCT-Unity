@@ -7,6 +7,7 @@ The data recorded from SCT is saved to a binary file to keep the storage size to
 
 ## Version History
 202003 - SCT 1.0
+202004 - SCT 1.01
 
 ## Structure
 
@@ -33,6 +34,7 @@ Parsing the header will give you information about needed to parse the frame spe
 ### Header
 
 The header consists of the following fields:
+
 Version (int32) - Identifies the protocol version. This is bumped whenever changes to the stream format are made. Make sure to check the version when parsing
 Frame Count (int 32 bits) - The number of frame data blocks the stream contains
 Device Orientation (int 32 bits) - The orientation the device had when recording. See UIDeviceOrientation enum for possible values
@@ -40,11 +42,15 @@ Horizontal FOV (float 32 bits) - Horizontal Field of View in degrees of the came
 Vertical FOV (float 32 bits) - Vertical Field of View in degrees of the camera lens used when recording. This differs from device to device.
 Focal Length X (float 32 bits) - Pixel focal length. X and Y are identical for square pixels.
 Focal Length Y (float 32 bits) - Pixel focal length. X and Y are identical for square pixels.
+Capture Type (int 32 bits) - Specifies the type of capture. 0 - Skeleton, 1 - Camera World Tracking
 
 ### Camera Frame
 A camera frame defines the camera position and rotation in 3D space and contains the following fields.
+Timestamp (double 32 bits) - Timestamp when the frame was captured. Use this for precise timing of frames
 Position (float3 96 bits) - Standard 3 component vector describing the camera position (x, y, z) 
 Rotation (float3 96 bits) - Standard 3 component vector describing the camera rotation in radians (roll, pitch, yaw)
+Exposure Offset (float 32 bits) - Use this value to light your scene during its post-processed lighting stage
+Exposure Duration (float 32 bits) - Use this value to determine how much motion blur to apply to your virtual content
 
 ### Skeleton Definition
 
