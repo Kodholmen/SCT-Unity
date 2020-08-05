@@ -38,7 +38,7 @@ namespace sct
         // Frame data
         private double frameTimestamp;
         private float frameExposureOffset;
-        private float frameExposureDuration;
+        private double frameExposureDuration;
 
         void Start()
         {
@@ -66,7 +66,7 @@ namespace sct
             SpatialUtils.applyCameraTransform(transform, pos, rot);
 
             frameExposureOffset = sr.ReadSingle();
-            frameExposureDuration = sr.ReadSingle();
+            frameExposureDuration = sr.ReadDouble();
 
             if (++currFrame >= replayData.frameCount)
             {

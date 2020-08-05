@@ -33,8 +33,8 @@ namespace sct
     {
         public enum CaptureType
         {
-            Skeleton,
-            Camera
+            Camera,
+            Skeleton
         }
 
         public CaptureType captureType;

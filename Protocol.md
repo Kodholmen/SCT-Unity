@@ -55,7 +55,7 @@ Timestamp (double 32 bits) - Timestamp when the frame was captured. Use this for
 Position (float3 96 bits) - Standard 3 component vector describing the camera position (x, y, z) 
 Rotation (float3 96 bits) - Standard 3 component vector describing the camera rotation in radians (roll, pitch, yaw)
 Exposure Offset (float 32 bits) - Use this value to light your scene during its post-processed lighting stage
-Exposure Duration (float 32 bits) - Use this value to determine how much motion blur to apply to your virtual content
+Exposure Duration (double 64 bits) - Use this value to determine how much motion blur to apply to your virtual content
 ```
 
 ### Skeleton Definition
