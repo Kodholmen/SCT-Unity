@@ -21,8 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -36,6 +34,11 @@ namespace sct
 
         private BinaryReader sr;
         private int currFrame;
+
+        // Frame data
+        private double frameTimestamp;
+        private float frameExposureOffset;
+        private float frameExposureDuration;
 
         void Start()
         {
@@ -55,11 +58,15 @@ namespace sct
 
         void Update()
         {
+            frameTimestamp = sr.ReadDouble();
+
             Vector3 pos = Vector3.zero;
             Vector3 rot = Vector3.zero;
-
             SpatialUtils.readCameraTransform(sr, ref pos, ref rot);
             SpatialUtils.applyCameraTransform(transform, pos, rot);
+
+            frameExposureOffset = sr.ReadSingle();
+            frameExposureDuration = sr.ReadSingle();
 
             if (++currFrame >= replayData.frameCount)
             {

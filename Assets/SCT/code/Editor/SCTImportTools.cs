@@ -21,10 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -37,29 +35,11 @@ namespace sct
             cameraAsset.version = sr.ReadInt32();
             cameraAsset.frameCount = sr.ReadInt32();
             cameraAsset.deviceOrientation = sr.ReadInt32();
-            if (cameraAsset.version > 202001)
-            {
-                cameraAsset.horizontalFOV = sr.ReadSingle();
-                cameraAsset.verticalFOV = sr.ReadSingle();
-            }
-            else
-            {
-                // Default iPad Pro
-                cameraAsset.horizontalFOV = 62.2f;
-                cameraAsset.verticalFOV = 48.9f;
-            }
-
-            if (cameraAsset.version > 202002)
-            {
-                cameraAsset.focalLengthX = sr.ReadSingle();
-                cameraAsset.focalLengthY = sr.ReadSingle();
-            }
-            else
-            {
-                // Default iPad Pro
-                cameraAsset.focalLengthX= 1592.0f;
-                cameraAsset.focalLengthY = 1592.0f;
-            }
+            cameraAsset.horizontalFOV = sr.ReadSingle();
+            cameraAsset.verticalFOV = sr.ReadSingle();
+            cameraAsset.focalLengthX = sr.ReadSingle();
+            cameraAsset.focalLengthY = sr.ReadSingle();
+            cameraAsset.captureType = (SpatialCameraAsset.CaptureType)sr.ReadInt32();
         }
 
         static void ReadSkeletonDefinition(BinaryReader sr, SpatialSkeletonAsset skeletonAsset)
