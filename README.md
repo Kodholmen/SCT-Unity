@@ -7,4 +7,27 @@ Spatial Camera Tracker is a virtual production tool allowing you to capture HD v
 
 Import the tracking information into Unity and drive virtual cameras, replaying the original camera movements, and capture CG footage and combine with your real life footage using standard video editing software or in-engine techniques. As the information is recorded you can iterate on your virtual scenes until you are happy with the result.
 
-The full User Guide can be found here: http://kodholmen.com/sct
+The full User Guide for the App can be found here: http://kodholmen.com/sct
+
+# Plugin User Guide
+
+## Import a spatial camera recording
+The first thing you want to do is to transfer the session you want to use from the iPhone/iPad onto the computer you are running Unity on by going into the share view in SCT and use any of the standard sharing mechanism.
+You can also use the "Files" application on your device to find/view/share the files.
+Place the files anywhere you want. It doesn't have to be under the project folder structure as you will import the data to a ScriptableObject asset by following the steps below:
+* Select the menu option "SCT->Import Spatial Camera", which will bring up a dialog to select a file to be imported.
+* Browse to the "capture.dat" file you transferred to your computer and click the "Open" button.
+* This will bring up a new dialog asking you where you want to save the data asset. Choose a location and name under the "Assets/" folder structure.
+If all goes well you now have an imported session that can be replayed by using the "SpatialCameraPlayer" prefab located under Assets/SCT/prefabs.
+If you click the asset and view the properties in the inspector you will see the meta data for the session such as version and camera intrinsics. These values can be used to match the camera lens settings for your virtual camera and the camera used when recording video.
+
+## Replay a captured session
+Before you start, remove any existing cameras from the scene as the prefab we use in this examle comes with a MainCamera.
+To use your imported sessions follow the steps below:
+* Place an empty GameObject in your scene. This will serve as the scene anchor allowing you to move the spatial camera around the scene. The replay will be relative the anchor's location.
+* Place an instance of the "SpatialCameraPlayer" prefab located under Assets/SCT/prefabs in the scene.
+* Make the prefab a child of anchor GameObject you placed in the first step. Make the localposition 0/0/0 to make it more clear where the camera replay will originate from.
+* Select the SpatialCameraPlayer and view the properties.
+* Reference the data asset you previously imported.
+* If you want the camera to try and match the FOV of the device used when recording, you can reference the camera located as a child to the prefab with the "Replay Camera" field. If you want to manually configure camera settings leave this empty.
+Press play and the camera should replay the recorded session!
