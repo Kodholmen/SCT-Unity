@@ -189,6 +189,7 @@ namespace sct
                             Matrix4x4 matrix = SpatialUtils.readMatrix(sr);
 
                             ReflectionProbe probe = new GameObject(string.Format("Probe_{0}", i)).AddComponent<ReflectionProbe>();
+                            probe.mode = UnityEngine.Rendering.ReflectionProbeMode.Custom;
                             probe.size = extent;
 
                             Debug.LogFormat("Extent: {0}/{1}/{2}", extent.x, extent.y, extent.z);
