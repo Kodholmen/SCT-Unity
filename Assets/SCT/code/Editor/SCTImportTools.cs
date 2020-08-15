@@ -163,5 +163,53 @@ namespace sct
             EditorUtility.FocusProjectWindow();
             Selection.activeObject = skeletonAsset;
         }
+
+        [MenuItem("SCT/Import Environment Probes")]
+        static void ImportEnvrinmentProbeAnchors()
+        {
+            string[] filters = { "Dat Files", "dat" };
+            string fileName = EditorUtility.OpenFilePanelWithFilters(
+                "Import Environment Probes",
+                ".",
+                filters);
+
+            if (fileName.Length == 0)
+                return;
+
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
+                    using (BinaryReader sr = new BinaryReader(fs))
+                    {
+                        int anchorCount = sr.ReadInt32();
+                        for (int i = 0; i < anchorCount; ++i)
+                        {
+                            Vector3 extent = SpatialUtils.readVector3(sr);
+                            Matrix4x4 matrix = SpatialUtils.readMatrix(sr);
+
+                            ReflectionProbe probe = new GameObject(string.Format("Probe_{0}", i)).AddComponent<ReflectionProbe>();
+                            probe.size = extent;
+
+                            Debug.LogFormat("Extent: {0}/{1}/{2}", extent.x, extent.y, extent.z);
+
+                            Vector3 anchorPos = Vector3.zero;
+                            anchorPos.x = matrix[0, 3];
+                            anchorPos.y = matrix[1, 3];
+                            anchorPos.z = -matrix[2, 3];
+
+                            probe.transform.position = anchorPos;
+                            probe.transform.rotation = Quaternion.identity;//matrix.rotation;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogErrorFormat("Error parsing {0} with exception: {1}", fileName, e);
+            }
+
+        }
+
     }
 }

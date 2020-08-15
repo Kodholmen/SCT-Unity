@@ -87,6 +87,16 @@ namespace sct
             return matrix;
         }
 
+        public static Vector3 readVector3(BinaryReader sr)
+        {
+            Vector3 v;
+            v.x = sr.ReadSingle();
+            v.y = sr.ReadSingle();
+            v.z = sr.ReadSingle();
+
+            return v;
+        }
+
         public static string readString(BinaryReader sr)
         {
             int len = sr.ReadInt32();
