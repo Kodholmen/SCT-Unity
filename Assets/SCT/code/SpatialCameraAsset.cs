@@ -46,6 +46,7 @@ namespace sct
         public float verticalFOV;
         public float focalLengthX;
         public float focalLengthY;
+        public Vector3[] userAnchors;
     }
 }
 

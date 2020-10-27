@@ -69,6 +69,22 @@ namespace sct
             }
         }
 
+        static void ImportUserAnchors(BinaryReader sr, SpatialCameraAsset cameraAsset)
+        {
+            // User anchors introduced in 202005
+            if (cameraAsset.version < 202005)
+                return;
+
+            int anchorCount = sr.ReadInt32();
+            cameraAsset.userAnchors = new Vector3[anchorCount];
+            for (int i = 0; i < anchorCount; ++i)
+            {
+                Vector3 position = SpatialUtils.readVector3(sr);
+                cameraAsset.userAnchors[i] = position;
+                Debug.LogFormat("Extent: {0}/{1}/{2}", position.x, position.y, position.z);
+            }
+        }
+
         [MenuItem("SCT/Import Spatial Camera")]
         static void ImportSpatialCamera()
         {
@@ -91,6 +107,7 @@ namespace sct
                     using (BinaryReader sr = new BinaryReader(fs))
                     {
                         ReadHeader(sr, cameraAsset);
+                        ImportUserAnchors(sr, cameraAsset);
                         cameraAsset.frameData = sr.ReadBytes((int)(fs.Length - fs.Position));
                     }
                 }
@@ -139,6 +156,7 @@ namespace sct
                     using (BinaryReader sr = new BinaryReader(fs))
                     {
                         ReadHeader(sr, skeletonAsset);
+                        ImportUserAnchors(sr, skeletonAsset);
                         ReadSkeletonDefinition(sr, skeletonAsset);
                         skeletonAsset.frameData = sr.ReadBytes((int)(fs.Length - fs.Position));
                     }
@@ -165,7 +183,7 @@ namespace sct
         }
 
         [MenuItem("SCT/Import Environment Probes")]
-        static void ImportEnvrinmentProbeAnchors()
+        static void ImportEnvironmentProbeAnchors()
         {
             string[] filters = { "Dat Files", "dat" };
             string fileName = EditorUtility.OpenFilePanelWithFilters(
@@ -211,6 +229,32 @@ namespace sct
             }
 
         }
+    }
 
+    [CustomEditor(typeof(SpatialCameraAsset))]
+    public class SpatialCameraAssetInspector : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.DrawDefaultInspector();
+
+            GUILayout.Space(20f);
+
+            if (GUILayout.Button("Create Anchors"))
+            {
+                SpatialCameraAsset asset = (SpatialCameraAsset)target;
+                if (asset.userAnchors.Length == 0)
+                    return;
+                Transform root = new GameObject(target.name).transform;
+                root.position = Vector3.zero;
+
+                for (int i=0; i<asset.userAnchors.Length; ++i)
+                {
+                    Transform anchor = new GameObject(string.Format("UserAnchor_{0}", i)).transform;
+                    anchor.SetParent(root);
+                    anchor.position = asset.userAnchors[i];
+                }
+            }
+        }
     }
 }
