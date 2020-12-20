@@ -75,17 +75,30 @@ namespace sct
                         float fovX = sr.ReadSingle();
                         float fovY = sr.ReadSingle();
 
+                        float flX = sr.ReadSingle();
+                        float flY = sr.ReadSingle();
+
+                        int captureType = sr.ReadInt32();
+
+                        int anchorCount = sr.ReadInt32();
+                        for (int i = 0; i < anchorCount; ++i)
+                            SpatialUtils.readVector3(sr);
+
                         Transform root = new GameObject("root").transform;
                         root.position = Vector3.zero;
                         root.rotation = Quaternion.identity;
 
                         for (int i = 0; i < Mathf.Max(30, frameCount); ++i)
                         {
+                            double timeStamp = sr.ReadDouble();
+
                             Vector3 pos = Vector3.zero;
                             Vector3 rot = Vector3.zero;
                             //Quaternion rot = Quaternion.identity;
 
                             SpatialUtils.readCameraTransform(sr, ref pos, ref rot);
+                            sr.ReadSingle();
+                            sr.ReadDouble();
                             //                            Debug.LogFormat("Frame {0}, pos: {1}, {2}, {3}, rot: {4}, {5}, {6}, {7}", i, pos.x, pos.y, pos.z, rot.x, rot.y, rot.z, rot.w);
 
                             Transform t = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
